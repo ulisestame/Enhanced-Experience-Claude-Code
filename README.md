@@ -4,8 +4,14 @@ A portable configuration layer that makes Claude Code more responsive to work wi
 
 Install it on any machine and your setup comes with you.
 
+```
+📁 my-project | 🌿 main +142/-38 | [Opus 5 (1M context) · high] | 💰 $0.2344
+
+⠹ 2h 14m | ⚡ 5hr: 42% | 📅 weekly: 18% | ⏳ Resets in 2h45m / 5d22h | ctx: ██████████░░░░░░░░░░░░ 42%
+```
+
 - 🔊 **Sounds** — audio notifications for every Claude Code event
-- 📊 **Status line** — a two-line bottom bar with model, cost, timing, rate limits, and context usage
+- 📊 **Status line** — a two-line bottom bar with model, effort, cost, timing, lines changed, rate limits, and context usage
 
 ## Installation
 
@@ -31,16 +37,38 @@ Prefer to read before you run? The installer is a single readable [`install.sh`]
 
 ## Status Line
 
-```
-📁 my-project | 🌿 main | [Opus 5 (1M context)] | 💰 $0.2344 | ⏱️ 0m 21s | 🔑 my-sess
-⚡ 5hr limit: 0% | 📅 weekly limit: 1% | ctx: ▓▓▓▓▓▓▓░░░░░░░░░░ 42%
-```
+**Line 1** — where you are and what it costs: directory, git branch with the lines changed beside it (both omitted outside a repo), model and its effort level, session cost.
 
-**Line 1** — directory, git branch (omitted outside a repo), model, session cost, elapsed time, session name.
+**Line 2** — how the session is going: a spinner and the elapsed time, rate limit usage, when each limit resets, and a context-window bar.
 
-**Line 2** — rate limit usage (shown only when the data is available) and a context-window bar that shifts green → yellow (36%) → red (66%).
+Details worth knowing:
+
+- **Effort** (`· high`) appears only on models that support it, so it is absent on models like Haiku rather than showing an empty slot.
+- **Elapsed time** measures how long the session has been open and scales to its own magnitude — `45s`, `6m 12s`, `3h 20m`, `4d 20h` — so a session left open for days stays readable instead of reporting five-digit minutes. The braille spinner in front of it turns once a second.
+- **Lines changed** (`+142/-38`, green and red) counts what Claude edited this session, not your own edits or what is already committed. The segment is hidden entirely when nothing has been touched.
+- **Rate limits and resets** render only when the session data includes them. Reset values follow the same order as the percentages above them: 5hr first, then weekly.
+- **The context bar** is a 22-cell truecolor gradient running green → red, and the percentage after it takes the gradient's color at its own position. Cells are painted with background color rather than block glyphs: block characters fall a pixel short of the cell in many fonts, which shows up as a notch along the bar.
+
+A blank row separates the two lines.
+
+The session name is deliberately absent — Claude Code already shows it above the prompt.
 
 Requires [`jq`](https://jqlang.github.io/jq/) (`brew install jq`).
+
+### Keeping it current
+
+The status line re-runs on events — a message, a finished turn, a model or effort change. Values read from the clock would otherwise freeze between events: the spinner stops, and the elapsed time and reset countdowns go stale on an idle session. The installer sets `refreshInterval` so the bar also re-renders on a timer:
+
+```json
+"statusLine": {
+  "type": "command",
+  "command": "~/.claude/statusline.sh",
+  "padding": 1,
+  "refreshInterval": 1
+}
+```
+
+One second is the minimum Claude Code accepts, and it is what the spinner needs to turn. The whole script runs on every tick, so it reads the session payload in a single `jq` pass to keep that cheap — about 20ms per render. Raise the interval if you would rather trade the animation for fewer wakeups; the bar stays correct either way.
 
 The script installs to `~/.claude/statusline.sh` — edit it freely to change segments, bar width, or color thresholds. See the [status line docs](https://code.claude.com/docs/en/statusline).
 
