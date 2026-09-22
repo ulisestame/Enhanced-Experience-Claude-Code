@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "touch /tmp/claude_new_session && afplay ~/.claude/sounds/start_claude_sound.wav",
+            "command": "touch /tmp/claude_new_session && afplay -v 0.5 ~/.claude/sounds/start_claude_sound.wav",
             "timeout": 10,
             "async": true
           }
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/sounds/claude_finished_task_01.wav"
+            "command": "afplay -v 0.5 ~/.claude/sounds/claude_finished_task_01.wav"
           }
         ]
       }
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay -v 0.5 ~/.claude/sounds/tool_call_failed.wav",
+            "command": "afplay -v 0.25 ~/.claude/sounds/tool_call_failed.wav",
             "timeout": 10,
             "async": true
           }
@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/sounds/notification_user_input.wav",
+            "command": "afplay -v 0.5 ~/.claude/sounds/notification_user_input.wav",
             "timeout": 10,
             "async": true
           }
@@ -56,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/sounds/notification_user_input.wav",
+            "command": "afplay -v 0.5 ~/.claude/sounds/notification_user_input.wav",
             "timeout": 10,
             "async": true
           }
@@ -69,7 +69,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay ~/.claude/sounds/compact_claude_session.wav",
+            "command": "afplay -v 0.5 ~/.claude/sounds/compact_claude_session.wav",
             "timeout": 10,
             "async": true
           }
@@ -82,7 +82,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay -v 0.3 ~/.claude/sounds/sub-starts.wav",
+            "command": "afplay -v 0.15 ~/.claude/sounds/sub-starts.wav",
             "timeout": 10,
             "async": true
           }
@@ -95,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay -v 0.2 ~/.claude/sounds/sub-ready.wav",
+            "command": "afplay -v 0.1 ~/.claude/sounds/sub-ready.wav",
             "timeout": 10,
             "async": true
           }

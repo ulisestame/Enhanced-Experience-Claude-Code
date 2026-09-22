@@ -85,6 +85,10 @@ if os.environ["INSTALL_STATUSLINE"] == "true":
         "type": "command",
         "command": "~/.claude/statusline.sh",
         "padding": 1,
+        # Re-run every second: the status line only redraws on events, so
+        # without this the spinner freezes and the elapsed time and reset
+        # countdowns go stale between turns.
+        "refreshInterval": 1,
     }
     print("✅ Status line configured")
 
